@@ -8,16 +8,35 @@ const io = require('socket.io')(http, {
   }
 });
 
-app.get('/', function(req, res){
+const fs = require('fs');
+const MESSAGE_HISTORY_FILE = './messageHistory.json';
+
+app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
 io.on('connection', (socket) => {
   console.log('A user connected');
 
+  let messageHistory = [];
+  try {
+    const data = fs.readFileSync(MESSAGE_HISTORY_FILE, 'utf8');
+    messageHistory = JSON.parse(data);
+  } catch (err) {
+    console.error(err);
+  }
+  socket.emit('message history', messageHistory);
+
   socket.on('chat message', (msg) => {
     console.log('message: ' + msg);
     io.emit('chat message', msg);
+
+    messageHistory.push(msg);
+    try {
+      fs.writeFileSync(MESSAGE_HISTORY_FILE, JSON.stringify(messageHistory));
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   socket.on('disconnect', () => {
