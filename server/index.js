@@ -1,4 +1,5 @@
-const app = require('express')();
+const express = require('express');
+const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
   cors: {
@@ -15,6 +16,8 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
+const ROOM_ID = 'common-room';
+
 io.on('connection', (socket) => {
   console.log('A user connected');
 
@@ -27,15 +30,23 @@ io.on('connection', (socket) => {
   }
   socket.emit('message history', messageHistory);
 
-  socket.on('chat message', (msg) => {
+  socket.on('join room', (roomId) => {
+    socket.join(roomId);
+  });
+
+  socket.on('chat message', (msg, callback) => {
     console.log('message: ' + msg);
-    io.emit('chat message', msg);
+
+    // Broadcast the message to other clients
+    socket.to(ROOM_ID).emit('chat message', msg);
 
     messageHistory.push(msg);
     try {
       fs.writeFileSync(MESSAGE_HISTORY_FILE, JSON.stringify(messageHistory));
+      callback(true); // Send confirmation to the client
     } catch (err) {
       console.error(err);
+      callback(false); // Send failure to the client
     }
   });
 
