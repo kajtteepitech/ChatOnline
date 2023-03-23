@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import styles from './SignupForm.module.scss';
 
 const SignupForm = ({ onSignup }) => {
   const [username, setUsername] = useState('');
@@ -19,7 +20,7 @@ const SignupForm = ({ onSignup }) => {
   };
 
   return (
-    <div>
+    <div className={styles.SignupForm}>
       <h2>Sign up</h2>
       <form onSubmit={handleSubmit}>
         <input

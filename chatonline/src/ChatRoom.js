@@ -1,5 +1,6 @@
 import React from 'react';
 import io from 'socket.io-client';
+import styles from './ChatRoom.module.scss';
 
 class ChatRoom extends React.Component {
   constructor(props) {
@@ -51,21 +52,23 @@ class ChatRoom extends React.Component {
 
   render() {
     return (
-      <div>
-        <ul>
+      <div className={styles.ChatRoom}>
+        <ul className={styles.Messages}>
           {this.state.messages.map((message, index) => (
-            <li key={index}>{message}</li>
+            <li className={styles.Message} key={index}>{message}</li>
           ))}
         </ul>
-        <form onSubmit={this.handleSubmit}>
+        <form className={styles.Form} onSubmit={this.handleSubmit}>
           <input
+            className={styles.Input}
             type="text"
+            placeholder="Type your message here..."
             value={this.state.messageInput}
             onChange={(event) =>
               this.setState({ messageInput: event.target.value })
             }
           />
-          <button type="submit">Send</button>
+          <button className={styles.Button} type="submit">Send</button>
         </form>
       </div>
     );
