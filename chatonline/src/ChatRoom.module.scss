@@ -12,10 +12,12 @@
 
 .Messages {
     flex-grow: 1;
-    overflow-y: auto;
+    overflow-y: scroll;
     padding: 20px;
     list-style-type: none;
     margin: 0;
+    max-height: 60vh;
+    /* adjust as needed */
 }
 
 .Message {
