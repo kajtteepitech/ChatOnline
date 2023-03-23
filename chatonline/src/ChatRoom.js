@@ -36,10 +36,11 @@ class ChatRoom extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.socket.emit('chat message', this.state.messageInput, (confirmation) => {
+    const messageToSend = `${this.props.user.username}: ${this.state.messageInput}`;
+    this.socket.emit('chat message', messageToSend, (confirmation) => {
       if (confirmation) {
         this.setState((prevState) => ({
-          messages: [...prevState.messages, prevState.messageInput],
+          messages: [...prevState.messages, messageToSend],
           messageInput: '',
         }));
       } else {
