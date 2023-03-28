@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ChatRoom from './ChatRoom';
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
+import UserList from './Users';
 import styles from './App.module.scss';
 
 function App() {
@@ -13,13 +14,12 @@ function App() {
     localStorage.setItem('token', userData.token);
     setUser(userData.user);
   };
-  
+
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     setUser(null);
   };
-  
 
   return (
     <div className={styles.App}>
@@ -30,8 +30,18 @@ function App() {
         </>
       ) : (
         <>
+          <div className={styles.HeaderAndButton}>
+          <h1 className={styles.TextHeader}>Welcome to ChatOnline {user.username}</h1>
           <button className={styles.LogoutButton} onClick={handleLogout}>Logout</button>
-          <ChatRoom user={user} />
+          </div>
+          <div className={styles.MainContent}>
+            <div className={styles.Users}>
+              <UserList />
+            </div>
+            <div className={styles.Chat}>
+              <ChatRoom user={user} />
+            </div>
+          </div>
         </>
       )}
     </div>

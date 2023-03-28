@@ -78,6 +78,7 @@ class ChatRoom extends React.Component {
         <form onSubmit={this.handleSubmit} className={styles.Form}>
           <input
             type="text"
+            placeholder='Type your message here...'
             value={this.state.messageInput}
             onChange={(event) =>
               this.setState({ messageInput: event.target.value })
